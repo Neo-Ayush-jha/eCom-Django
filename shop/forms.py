@@ -6,6 +6,7 @@ from .models import *
 class PrivateCreateForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model =User
+        fields=('username','first_name','last_name','email','profile_Picture')
     def save(self,commit=True):
         user=super().save(commit=False)
         user.is_private=True
@@ -16,6 +17,7 @@ class PrivateCreateForm(UserCreationForm):
 class PublicCreateFrom(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model=User
+        fields=('username','first_name','last_name','email','profile_Picture')
     def save(self,commit=True):
         user=super().save(commit=False)
         user.is_public=True

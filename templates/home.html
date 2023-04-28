@@ -5,7 +5,7 @@
     <div class="container mt-5">
         <div class="row">
             {% for product in products  %}
-            <div class="col-2">
+            <div class="col-xl-2 col-sm-4">
                 <div class="card"  title="{{ product.p_name }}">
                     <img src="{{ product.p_image.url }}" class="w-100" style="height:200px;object-fit:cover" alt="">
                     <div class="card-body">
@@ -15,7 +15,7 @@
                         {% else %}
                             <h5 class="h6">Rs. {{product.p_price}}</h5>
                         {% endif %}
-                        {% comment %} <a href="{% url 'viewProduct' product.slug %}" class="btn btn-success mt-2">Buy Now</a> {% endcomment %}
+                        <a href="{% url 'viewProduct' product.slug %}" class="btn btn-success mt-2">Buy Now</a>
                     </div>
                 </div>
             </div>

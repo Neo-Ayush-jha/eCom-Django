@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <h2 class="h2">My Cart
+                {% if order.0.item.count %}
+                    ({{order.0.item.count}})
+                {% endif %}
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col-9">
+                {% for order_item in order.0.items.all %}
+                <div class="card mb-3 p-2">
+                    <div class="row">
+                        <div class="col-1">
+                            <img src="{{order_item.item.p_image.url}}" alt="" class="w-100">
+                        </div>
+                        <div class="col-10">
+                            <h2 class="h6 mb-0">{{order_item.item.p_name}}</h2>
+                            <div class="d-flex">
+                                <p class="text small mb-2 text-muted">Category: {{order_item.item.p_category.cat_title}}</p>
+                            </div>
+                            <div class="d-flex align-items-baseline gap-2">
+                                
+                                {% if order_item.item.p_discount_price %}
+                                    <h4 class="h4">${{order_item.get_discount_price}} <del class="h6 text-muted">${{order_item.get_price}}</del></h4>
+                                    <span class="text-success fw-bold">Save: {{order_item.item.getSaveingPercentage}}%</span>
+                                    {% else %}
+                                        <h4>${{order_item.get_price}}</h4>
+                                {% endif %}                                    
+                            </div>
+                            <div class="d-flex gap-1 align-item-baseline">
+                                <a href="{% url 'removeToCart' order_item.item.slug %}" class="btn btn-danger">-</a>
+                                <span class="h6">{{order_item.qty}}</span>
+                                <a href="{%url 'addToCart' order_item.item.slug%}" class="btn btn-success">+</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

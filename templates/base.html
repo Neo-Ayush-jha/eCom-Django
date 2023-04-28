@@ -22,15 +22,16 @@
             box-shadow: 0 0 2px 2px #2ecc71!important;
         }
     </style>
+    <script src="https://cdn.lordicon.com/bhenfmcm.js"></script>
 
 </head>
 <body>
-    
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a href="{% url 'home' %}" class="navbar-brand">Eshop</a>
+            <lord-icon src="https://cdn.lordicon.com/qwzdhaoa.json" trigger="hover" style="width:70px;height:70px">
+            </lord-icon><a href="{% url 'home' %}" class="navbar-brand"><span class="my-0 py-0">Shoppee!!</span></a>
 
-            <form action="" class="mx-auto d-flex">
+            <form action="{% url 'search' %}" class="mx-auto d-flex">
                 <input type="text" class="form-control" size="70" name="search" placeholder="e.g 'Clinic Plus','Shoes' etc">
                 <input type="submit" value="Go" class="btn btn-danger">
             </form>
@@ -64,8 +65,7 @@
             <ul class="navbar-nav">
                
                {% for cat in category %}
-                    {% comment %} <li class="nav-item"><a href="{% url 'filter' cat.slug %}" class="nav-link">{{ cat.title }}</a></li> {% endcomment %}
-                    <li class="nav-item"><a href="" class="nav-link">{{ cat.cat_title }}</a></li>
+                    <li class="nav-item"><a href="{%url 'filterProduct' cat.slug %}" class="nav-link">{{ cat.cat_title }}</a></li>
                {% endfor %}
                
             </ul>

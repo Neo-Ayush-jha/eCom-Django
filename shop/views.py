@@ -1,10 +1,10 @@
-from django.shortcuts import render,redirect,HttpResponse
+from django.shortcuts import render,redirect,HttpResponse,get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from .models import *
 from .forms import *
 from django.views.generic import CreateView, View, ListView, FormView
 from django.contrib.auth import login,authenticate,logout
-
+from django.contrib.auth.decorators import login_required
 def getCategory():
     return Category.objects.all()
 class HomeView(View):
@@ -63,3 +63,58 @@ class LogoutView(View):
     def get(self,req):
         logout(req)
         return redirect("login_user")
+    
+def filterProduct(req,slug):
+    data = {}
+    data['category'] = getCategory()
+    data['products'] = Product.objects.filter(p_category__slug=slug)
+    return render(req, "home.html", data)
+
+def search(req):
+    data = {}
+    data['category'] = getCategory()
+    data['products'] = Product.objects.filter(p_name__icontains=req.GET.get('search'))
+    return render(req,"home.html",data)
+
+def viewProduct(r, slug):
+    data = {}
+    data['category']  = getCategory()
+    data['product'] = Product.objects.get(slug=slug)
+    return render(r, "singleView.html", data)
+@login_required()
+def addToCard(req,slug):
+    product=get_object_or_404(Product,slug=slug)
+    order_item,created=OrderItem.objects.get_or_create(user=req.user,ordered=False,item=product)
+    order_qs=Order.objects.filter(user=req.user,ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        # order is exist
+        if(order.items.filter(item__slug=slug).exists()):
+            order_item.qty +=1
+            order_item.save()
+        else:
+            order.items.add(order_item)
+        return redirect(myCart)
+    else:
+        # new order
+            order = Order.objects.create(user=req.user)
+            order.items.add(order_item)
+            return redirect(myCart)
+@login_required()
+def removeToCart(req,slug):
+    product=get_object_or_404(Product,slug=slug)
+    order=Order.objects.get(user=req.user,ordered=False)
+    order_item=OrderItem.objects.get(user=req.user,ordered=False,item=product)
+    if order:
+        if(order.items.filter(item__slug=slug).exists()):
+            if order_item.qty<=1:
+                order_item.delete()
+            else:
+                order_item.qty-=1
+                order_item.save()
+        return redirect(myCart)
+@login_required()
+def myCart(r):
+    data = {} 
+    data['order'] = Order.objects.filter(user=r.user,ordered=False)
+    return render(r, "cart.html",data)

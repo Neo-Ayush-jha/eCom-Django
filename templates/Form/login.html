@@ -1,9 +1,9 @@
 {% extends 'base.html' %}{% load static %}{% block content %}{%load crispy_forms_tags%}
     <div class="contaner">
         <div class="row">
-            <h1 class="display-3 text-center">Create an account as {{user_type}}'s</h1>
+            <h1 class="display-3 text-center">Login your account</h1>
             <div class="col-8 mx-auto">
-                <form action="" method="post" enctype="multipart/form-data" >
+                <form action="" method="post">
                     {%csrf_token%}
                     {{form|crispy}}
                     <input type="submit" value="Register" class="btn btn-success">

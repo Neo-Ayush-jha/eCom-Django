@@ -10,5 +10,12 @@ urlpatterns = [
     path("singup/public/",PublicView.as_view(),name="public_user_singup"),
     path("login/",LoginView.as_view(),name="login_user"),
     path("logout/user/",LogoutView.as_view(),name="logout"),
+    path("category/<slug>/",filterProduct,name="filterProduct"),
+    path('search/', search, name="search"),
+    path("product/<slug>/",viewProduct, name="viewProduct"),
+    path("add-to-cart/<slug>/",addToCard,name="addToCart"),
+    path("remove/to/cart/<slug>/",removeToCart,name="removeToCart"),
+    path("cart/",myCart,name="myCart"),
+
 ]
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
